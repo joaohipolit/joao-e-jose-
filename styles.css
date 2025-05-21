@@ -1,0 +1,52 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 30px;
+}
+
+.gallery img {
+  width: 100px;
+  height: 75px;
+  cursor: pointer;
+  object-fit: cover;
+  border: 2px solid transparent;
+  transition: border 0.3s;
+}
+
+.gallery img:hover {
+  border: 2px solid #007BFF;
+}
+
+.main-view {
+  margin-top: 20px;
+}
+
+#main-image {
+  max-width: 80%;
+  height: auto;
+  border: 3px solid #444;
+  margin-bottom: 10px;
+}
+
+/* Efeito de opacidade quando o rato passa por cima */
+.gallery.hover-active img {
+  opacity: 0.3;
+  transition: opacity 0.3s;
+}
+
+/* A imagem sobre a qual está o cursor mantém a opacidade normal */
+.gallery.hover-active img.hovered {
+  opacity: 1 !important;
+}
