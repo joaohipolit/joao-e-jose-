@@ -6,7 +6,7 @@ const mapContainer = document.getElementById('map');
 let map;
 let marker;
 
-const flickrUrl = 'https://www.flickr.com/services/rest/?method=flickr.interestingness.getList&api_key=b5543b9dc0abf356d5dc8b79ee3dc8c3&extras=geo&per_page=50&format=json&nojsoncallback=1';
+const flickrUrl = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=b5543b9dc0abf356d5dc8b79ee3dc8c3&has_geo=1&extras=geo,url_m&sort=interestingness-desc&per_page=100&format=json&nojsoncallback=1';
 
 fetch(flickrUrl)
   .then(response => response.json())
