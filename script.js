@@ -1,54 +1,75 @@
-// Referência para a galeria de miniaturas
 const gallery = document.getElementById('gallery');
-
-// Referência para a imagem grande principal
 const mainImage = document.getElementById('main-image');
-
-// Referência para o título da imagem
 const imageTitle = document.getElementById('image-title');
+const mapContainer = document.getElementById('map');
 
-// URL da API do Flickr com imagens interessantes (sem localização)
-const flickrUrl = 'https://www.flickr.com/services/rest/?method=flickr.interestingness.getList&api_key=1d49ddb0af7a7a2bc8145756f38d677a&per_page=50&format=json&nojsoncallback=1';
+let map;
+let marker;
 
-// Faz uma requisição à API do Flickr
+const flickrUrl = 'https://www.flickr.com/services/rest/?method=flickr.interestingness.getList&api_key=b5543b9dc0abf356d5dc8b79ee3dc8c3&per_page=50&format=json&nojsoncallback=1';
+
 fetch(flickrUrl)
-  .then(response => response.json()) // Converte a resposta para JSON
+  .then(response => response.json())
   .then(data => {
-    const photos = data.photos.photo; // Extrai a lista de fotos
+    const photos = data.photos.photo;
 
-    // Itera por cada foto da lista
     for (const photo of photos) {
-      // URL da miniatura da imagem (tamanho pequeno)
       const thumbUrl = `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_q.jpg`;
-
-      // URL da imagem em tamanho grande
       const fullUrl = `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_b.jpg`;
 
-      // Cria um elemento <img> para a miniatura
       const img = document.createElement('img');
       img.src = thumbUrl;
       img.alt = photo.title;
 
-      // Ao clicar na imagem, mostra a imagem grande e o título
       img.addEventListener('click', () => {
         mainImage.src = fullUrl;
         imageTitle.textContent = photo.title || 'Sem descrição';
+
+        const lat = parseFloat(photo.latitude);
+        const lon = parseFloat(photo.longitude);
+
+        // Remove mensagem anterior
+        const existingMsg = document.getElementById('map-message');
+        if (existingMsg) existingMsg.remove();
+
+        if (!isNaN(lat) && !isNaN(lon) && (lat !== 0 || lon !== 0)) {
+          if (!map) {
+            map = L.map('map').setView([lat, lon], 12);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            marker = L.marker([lat, lon]).addTo(map);
+          } else {
+            map.flyTo([lat, lon], 12, {
+              animate: true,
+              duration: 1.2
+            });
+            marker.setLatLng([lat, lon]);
+
+            setTimeout(() => {
+              map.invalidateSize();
+            }, 300);
+          }
+        } else {
+          const msg = document.createElement('p');
+          msg.id = 'map-message';
+          msg.style.color = 'grey';
+          msg.textContent = 'Sem localização disponível para esta imagem.';
+          mapContainer.appendChild(msg);
+        }
       });
 
-      // Efeito de hover para opacidade
       img.addEventListener('mouseenter', () => {
         gallery.classList.add('hover-active');
         img.classList.add('hovered');
       });
 
-      // Sai do hover, remove classes de efeito
       img.addEventListener('mouseleave', () => {
         gallery.classList.remove('hover-active');
         img.classList.remove('hovered');
       });
 
-      // Adiciona a miniatura na galeria
       gallery.appendChild(img);
     }
   })
-  .catch(error => console.error('Erro ao buscar imagens:', error)); // Mostra erro se a API falhar
+  .catch(error => console.error('Erro ao buscar imagens:', error));

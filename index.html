@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Flickr Interessantes</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
   <h1>Fotos Interessantes do Flickr</h1>
@@ -12,12 +13,17 @@
   <!-- Galeria de miniaturas -->
   <div id="gallery" class="gallery"></div>
 
-  <!-- Imagem grande e título -->
+  <!-- Imagem grande + título -->
   <div id="main-view" class="main-view">
     <img id="main-image" src="" alt="Imagem Selecionada" />
     <p id="image-title"></p>
   </div>
 
+  <!-- Mapa -->
+ <!--<div id="map" class="map"></div>--> 
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
