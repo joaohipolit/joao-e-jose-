@@ -6,7 +6,7 @@ const mapContainer = document.getElementById('map');
 let map;
 let marker;
 
-const flickrUrl = 'https://www.flickr.com/services/rest/?method=flickr.interestingness.getList&api_key=b5543b9dc0abf356d5dc8b79ee3dc8c3&extras=coordenadas&per_page=50&format=json&nojsoncallback=1';
+const flickrUrl = 'https://www.flickr.com/services/rest/?method=flickr.interestingness.getList&api_key=b5543b9dc0abf356d5dc8b79ee3dc8c3&extras=geo&per_page=50&format=json&nojsoncallback=1';
 
 fetch(flickrUrl)
   .then(response => response.json())
@@ -24,40 +24,32 @@ fetch(flickrUrl)
       img.alt = photo.title;
 
       img.addEventListener('click', () => {
-        // Atualiza imagem principal e título
-        document.querySelectorAll('.gallery img').forEach(i => i.classList.remove('selected'));
-        img.classList.add('selected');
         mainImage.src = fullUrl;
         mainImage.alt = photo.title;
         imageTitle.textContent = photo.title || 'Sem descrição';
 
-        // Atualiza o mapa
+        // Limpa mapa anterior
+        if (map) {
+          map.remove();
+          map = null;
+        }
+
+        // Verifica localização
         if (!isNaN(lat) && !isNaN(lon) && (lat !== 0 || lon !== 0)) {
-          if (!map) {
-            map = L.map('map').setView([lat, lon], 12);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-          } else {
-            map.setView([lat, lon], 12);
-          }
+          mapContainer.innerHTML = ''; // limpa mensagens antigas
+          map = L.map('map').setView([lat, lon], 12);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+          }).addTo(map);
 
-          if (marker) {
-            marker.remove();
-          }
-
-          marker = L.marker([lat, lon]).addTo(map).bindPopup(photo.title || 'Sem título').openPopup();
+          marker = L.marker([lat, lon]).addTo(map)
+                   .bindPopup(photo.title || 'Sem título')
+                   .openPopup();
         } else {
-          // Se não tiver localização
-          if (map) {
-            map.remove();
-            map = null;
-          }
           mapContainer.innerHTML = '<p style="color: grey;">Sem localização disponível para esta imagem.</p>';
         }
       });
 
-      // Efeitos visuais
       img.addEventListener('mouseenter', () => {
         gallery.classList.add('hover-active');
         img.classList.add('hovered');
@@ -71,9 +63,9 @@ fetch(flickrUrl)
       gallery.appendChild(img);
     }
 
-    // Simula clique na primeira imagem automaticamente
-    if (photos.length > 0) {
+    if (gallery.firstChild) {
       gallery.firstChild.click();
     }
   })
   .catch(error => console.error('Erro ao buscar imagens:', error));
+

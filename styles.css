@@ -1,13 +1,11 @@
 body {
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: Arial, sans-serif;
   text-align: center;
   margin: 20px;
-  background-color: #f8f9fa;
 }
 
 h1 {
   margin-bottom: 20px;
-  color: #333;
 }
 
 .gallery {
@@ -24,17 +22,11 @@ h1 {
   cursor: pointer;
   object-fit: cover;
   border: 2px solid transparent;
-  transition: border 0.3s, opacity 0.3s, transform 0.2s;
+  transition: border 0.3s;
 }
 
 .gallery img:hover {
   border: 2px solid #007BFF;
-  transform: scale(1.05);
-}
-
-.gallery img.selected {
-  border: 2px solid #28a745;
-  opacity: 1 !important;
 }
 
 .main-view {
@@ -46,26 +38,23 @@ h1 {
   height: auto;
   border: 3px solid #444;
   margin-bottom: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 #image-title {
   font-weight: bold;
   margin-bottom: 20px;
-  color: #222;
 }
 
-/* Efeitos de opacidade ao passar o rato */
 .gallery.hover-active img {
   opacity: 0.3;
+  transition: opacity 0.3s;
 }
 
 .gallery.hover-active img.hovered {
   opacity: 1 !important;
 }
 
-/* Mapa */
- #map {
+#map {
   height: 400px;
   max-width: 80%;
   margin: 20px auto;
