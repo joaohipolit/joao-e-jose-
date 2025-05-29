@@ -31,6 +31,7 @@ h1 {
 
 .main-view {
   margin-top: 20px;
+  position: relative;
 }
 
 #main-image {
@@ -42,9 +43,25 @@ h1 {
 
 #image-title {
   font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* ❤️ Estilo para o botão de like */
+#like-button {
+  background: none;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  color: #d00;
   margin-bottom: 20px;
 }
 
+#like-button:hover {
+  transform: scale(1.2);
+}
+
+/* Opacidade nas imagens da galeria ao passar o rato */
 .gallery.hover-active img {
   opacity: 0.3;
   transition: opacity 0.3s;
@@ -54,6 +71,7 @@ h1 {
   opacity: 1 !important;
 }
 
+/* Mapa */
 #map {
   height: 400px;
   max-width: 80%;
