@@ -13,6 +13,7 @@ const database = firebase.database();
 
 const container = document.getElementById('liked-gallery');
 
+// Lê as imagens curtidas da base de dados
 database.ref('likes').once('value')
   .then(snapshot => {
     const likes = snapshot.val();
@@ -22,11 +23,13 @@ database.ref('likes').once('value')
     }
 
     Object.values(likes).forEach(data => {
+      if (!data.url) return; // ignora imagens sem URL
+
       const item = document.createElement('div');
       item.className = 'gallery-item';
 
       const img = document.createElement('img');
-      img.src = data.url || '';
+      img.src = data.url;
       img.alt = data.title || 'Sem título';
 
       const caption = document.createElement('div');
@@ -42,3 +45,9 @@ database.ref('likes').once('value')
     console.error('Erro ao carregar imagens curtidas:', err);
     container.innerHTML = '<p style="color: red;">Erro ao carregar imagens.</p>';
   });
+
+// Funcionalidade do botão "Voltar"
+const backButton = document.getElementById('back-button');
+backButton.addEventListener('click', () => {
+  window.location.href = 'index.html';
+});
