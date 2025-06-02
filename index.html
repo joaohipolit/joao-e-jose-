@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Flickr Interessantes</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
@@ -19,9 +19,14 @@
     <p id="image-title"></p>
   </div>
 
-  <!-- Mapa + botão de curtir -->
+  <!-- Mapa -->
   <div id="map" class="map"></div>
-  <div id="like-button-container" class="like-container"></div>
+
+  <!-- Container dos botões -->
+  <div id="like-button-container" class="like-container">
+    <button id="like-button" style="display:none;">❤️ Curtir</button>
+    <button id="liked-images-page-button">Página de imagens curtidas</button>
+  </div>
 
   <!-- Scripts -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -29,6 +34,4 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <script src="script.js"></script>
 </body>
-</html>
-
 </html>

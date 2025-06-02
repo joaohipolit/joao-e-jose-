@@ -18,11 +18,13 @@ const mainImage = document.getElementById('main-image');
 const imageTitle = document.getElementById('image-title');
 const mapContainer = document.getElementById('map');
 const likeBtnContainer = document.getElementById('like-button-container');
+const likeBtn = document.getElementById('like-button');
+const likedImagesPageBtn = document.getElementById('liked-images-page-button');
 
 let map;
 let marker;
 
-const flickrUrl = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=28e1be2b4c47585b2a2994c6a7c14c9b&has_geo=1&extras=geo,url_m&sort=interestingness-desc&per_page=100&format=json&nojsoncallback=1';
+const flickrUrl = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=09c89031361c7c4e7785e314bef3a98e&has_geo=1&extras=geo,url_m&sort=interestingness-desc&per_page=100&format=json&nojsoncallback=1';
 
 // ==== FUNÇÃO PARA GUARDAR LIKE NO FIREBASE ====
 function salvarLikeFirebase(photo, lat, lon) {
@@ -37,7 +39,8 @@ function salvarLikeFirebase(photo, lat, lon) {
       likeRef.set({
         title: photo.title || 'Sem título',
         latitude: lat,
-        longitude: lon
+        longitude: lon,
+        url: `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_q.jpg` // miniatura
       }).then(() => {
         alert('Imagem curtida com sucesso!');
       }).catch(() => {
@@ -46,6 +49,11 @@ function salvarLikeFirebase(photo, lat, lon) {
     }
   });
 }
+
+// ==== CONFIGURAÇÃO DO BOTÃO "Página de imagens curtidas" ====
+likedImagesPageBtn.addEventListener('click', () => {
+  window.location.href = 'Imagens_curtidas.html';
+});
 
 // ==== FETCH DAS IMAGENS DO FLICKR ====
 fetch(flickrUrl)
@@ -68,18 +76,28 @@ fetch(flickrUrl)
         mainImage.alt = photo.title;
         imageTitle.textContent = photo.title || 'Sem descrição';
 
+        // Mostrar botão curtir e atualizar evento
+        likeBtn.style.display = 'inline-block';
+
+        // Remove antigos eventos do botão curtir antes de adicionar o novo
+        likeBtn.replaceWith(likeBtn.cloneNode(true));
+        const newLikeBtn = document.getElementById('like-button');
+
+        newLikeBtn.addEventListener('click', () => {
+          salvarLikeFirebase(photo, lat, lon);
+        });
+
         // Limpa mapa anterior
         if (map) {
           map.remove();
           map = null;
         }
 
-        // Limpa botão like antigo
-        likeBtnContainer.innerHTML = '';
+        // Limpa mensagens do mapa
+        mapContainer.innerHTML = '';
 
         // Verifica localização
         if (!isNaN(lat) && !isNaN(lon) && (lat !== 0 || lon !== 0)) {
-          mapContainer.innerHTML = ''; // limpa mensagens antigas
           map = L.map('map').setView([lat, lon], 12);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
@@ -91,26 +109,6 @@ fetch(flickrUrl)
         } else {
           mapContainer.innerHTML = '<p style="color: grey;">Sem localização disponível para esta imagem.</p>';
         }
-
-        // Cria botão de curtir
-        const likeBtn = document.createElement('button');
-        likeBtn.textContent = '❤️ Curtir';
-        likeBtn.id = 'like-button';
-        likeBtn.style.marginTop = '10px';
-        likeBtn.style.fontSize = '18px';
-        likeBtn.style.cursor = 'pointer';
-        likeBtn.style.padding = '8px 12px';
-        likeBtn.style.borderRadius = '8px';
-        likeBtn.style.border = 'none';
-        likeBtn.style.backgroundColor = '#ff6b81';
-        likeBtn.style.color = 'white';
-
-        // Coloca o botão no container certo
-        likeBtnContainer.appendChild(likeBtn);
-
-        likeBtn.addEventListener('click', () => {
-          salvarLikeFirebase(photo, lat, lon);
-        });
       });
 
       img.addEventListener('mouseenter', () => {
