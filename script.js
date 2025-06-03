@@ -24,7 +24,7 @@ const likedImagesPageBtn = document.getElementById('liked-images-page-button');
 let map;
 let marker;
 
-const flickrUrl = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=09c89031361c7c4e7785e314bef3a98e&has_geo=1&extras=geo,url_m&sort=interestingness-desc&per_page=100&format=json&nojsoncallback=1';
+const flickrUrl = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=befc3a822dffe193bb4caa491a33ec7a&has_geo=1&extras=geo,url_m&sort=interestingness-desc&per_page=100&format=json&nojsoncallback=1';
 
 // ==== FUNÇÃO PARA GUARDAR LIKE NO FIREBASE ====
 function salvarLikeFirebase(photo, lat, lon) {

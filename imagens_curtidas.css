@@ -52,3 +52,50 @@ h1 {
 #back-button:hover {
   background-color: #0056b3;
 }
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .gallery img {
+    width: 120px;
+    height: 80px;
+  }
+
+  .gallery-item {
+    width: 120px;
+  }
+
+  #back-button {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .gallery img {
+    width: 90%;
+    height: auto;
+  }
+
+  .gallery-item {
+    width: 90%;
+  }
+
+  .gallery-item p {
+    font-size: 0.85rem;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  #back-button {
+    font-size: 14px;
+    padding: 6px 12px;
+    width: 80%;
+  }
+}
